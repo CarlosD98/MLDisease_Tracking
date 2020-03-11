@@ -1,7 +1,5 @@
-from pymongo import MongoClient
 
 import pandas as pd
-import matplotlib.pyplot as plt
 import datetime as dt
 import requests
 import json
@@ -14,7 +12,7 @@ diseases = requests.get('http://54.211.232.101:8080/api/diseases/')
 for i in diseases.json():
     print(i)
 
-    cursor = requests.get("http://localhost:8080/api/diseases/report/"+i)
+    cursor = requests.get("http://54.211.232.101:8080/api/diseases/report/"+i)
     print(cursor)
     l = list(cursor.json())
 
@@ -48,7 +46,7 @@ for i in diseases.json():
 
     dates = []
     for d in df['date']:
-        print(type(d))
+
         temp = d.to_pydatetime()
         dates.append(temp.strftime('%Y-%m-%d'))
     df['dates'] = dates
@@ -59,8 +57,8 @@ for i in diseases.json():
     body = json.dumps({"disease": i, "date": dt.date.today().strftime('%Y-%m-%d'),
                        "forecast": fc.tolist(), "data": lData[::-1]})
     print(body)
-    #req = requests.post("http://localhost:8080/forecast", body)
-   # print(req.json())
+    req = requests.post("http://54.211.232.101:8080/forecast", body)
+    print(req.json())
     print(model.intercept_, model.coef_)
 
 # plt.plot(datelist, y_predict, color='red', linewidth=2)
